@@ -4,7 +4,7 @@
 
 A Go library to deliberate using Majority Judgment.
 
-We use a score-based algorithm, for performance and scalability.
+We use a **score-based algorithm**, for performance and scalability.
 
 Supports billions of judgments and thousands of proposals per poll, if need be.
 
@@ -55,4 +55,11 @@ func main() {
 
 ## License
 
-`MIT`
+`MIT` 🐜
+
+
+## Contribute
+
+A review by a seasoned `Go` veteran would be appreciated.
+
+
