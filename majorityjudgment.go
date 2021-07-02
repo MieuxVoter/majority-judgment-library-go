@@ -35,6 +35,15 @@ func (mj *MajorityJudgment) Deliberate(tally *PollTally) (_ *PollResult, err err
 	amountOfGrades := len(tally.Proposals[0].Tally)
 	for _, proposalTally := range tally.Proposals {
 		if amountOfGrades != len(proposalTally.Tally) {
+			return nil, fmt.Errorf("mishaped tally: " +
+				"some proposals hold more grades than others ; " +
+				"please provide tallies of the same shape")
+		}
+	}
+
+	amountOfJudgments := tally.Proposals[0].CountJudgments()
+	for _, proposalTally := range tally.Proposals {
+		if amountOfJudgments != proposalTally.CountJudgments() {
 			return nil, fmt.Errorf("unbalanced tally: " +
 				"some proposals hold more judgments than others ; " +
 				"use one of the tally balancers or make your own")
@@ -59,9 +68,7 @@ func (mj *MajorityJudgment) Deliberate(tally *PollTally) (_ *PollResult, err err
 
 	sort.Sort(sort.Reverse(proposalsResultsSorted))
 
-	// Rule: Multiple Candidates may have the same Position in case of perfect equality.
-	// or (for Randomized Condorcet evangelists)
-	// Rule: Multiple Candidates at perfect equality are shuffled.
+	// Rule: Multiple Proposals may have the same Rank in case of perfect equality.
 	previousScore := ""
 	for proposalIndex, proposalResult := range proposalsResultsSorted {
 		rank := proposalIndex + 1
@@ -79,7 +86,6 @@ func (mj *MajorityJudgment) Deliberate(tally *PollTally) (_ *PollResult, err err
 	return result, nil
 }
 
-//
 // See docs/score-calculus-flowchart.png
 func (mj *MajorityJudgment) ComputeScore(tally *ProposalTally, favorContestation bool) (_ string, err error) {
 	score := ""

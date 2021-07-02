@@ -53,3 +53,17 @@ func TestMishapedTally(t *testing.T) {
 	assert.Error(t, err, "Deliberation should fail")
 	assert.Nil(t, result, "Deliberation result should be nil")
 }
+
+func TestUnbalancedTally(t *testing.T) {
+	poll := &PollTally{
+		AmountOfJudges: 10,
+		Proposals: []*ProposalTally{
+			{Tally: []uint64{2, 2, 2, 2, 2}},
+			{Tally: []uint64{2, 0, 0, 0, 2}},
+		},
+	}
+	deliberator := &MajorityJudgment{}
+	result, err := deliberator.Deliberate(poll)
+	assert.Error(t, err, "Deliberation should fail")
+	assert.Nil(t, result, "Deliberation result should be nil")
+}
