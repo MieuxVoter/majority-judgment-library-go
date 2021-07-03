@@ -52,3 +52,9 @@ func (proposalTally *ProposalTally) RegradeJudgments(fromGrade uint8, intoGrade 
 
 	return nil
 }
+
+func (proposalTally *ProposalTally) Analyze() (_ *ProposalAnalysis) {
+	analysis := &ProposalAnalysis{}
+	analysis.Run(proposalTally, true)
+	return analysis
+}

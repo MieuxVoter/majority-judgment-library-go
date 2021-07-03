@@ -5,9 +5,10 @@ type PollResult struct {
 }
 
 type ProposalResult struct {
-	Index int    // index of the proposal in the input proposals' tallies
-	Rank  int    // Rank starts at 1 (best) and goes upwards.  Equal Proposals share the same rank.
-	Score string // higher lexicographically → better rank
+	Index    int    // index of the proposal in the input proposals' tallies
+	Rank     int    // Rank starts at 1 (best) and goes upwards.  Equal Proposals share the same rank.
+	Score    string // higher lexicographically → better rank
+	Analysis *ProposalAnalysis
 }
 
 // ProposalsResults implements sort.Interface based on the Score field.

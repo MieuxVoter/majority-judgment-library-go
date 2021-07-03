@@ -52,15 +52,16 @@ func (mj *MajorityJudgment) Deliberate(tally *PollTally) (_ *PollResult, err err
 
 	proposalsResults := make(ProposalsResults, 0, 16)
 	proposalsResultsSorted := make(ProposalsResults, 0, 16)
-	for _, proposalTally := range tally.Proposals {
+	for proposalIndex, proposalTally := range tally.Proposals {
 		score, scoreErr := mj.ComputeScore(proposalTally, true)
 		if nil != scoreErr {
 			return nil, scoreErr
 		}
 		proposalResult := &ProposalResult{
-			Rank:  0, // we set it below after the sort
-			Score: score,
-			//Analysis: proposalTally.Analyze(),
+			Index:    proposalIndex,
+			Score:    score,
+			Analysis: proposalTally.Analyze(),
+			Rank:     0, // we set it below after the sort
 		}
 		proposalsResults = append(proposalsResults, proposalResult)
 		proposalsResultsSorted = append(proposalsResultsSorted, proposalResult)
