@@ -1,5 +1,7 @@
 # Majority Judgment for Golang
 
+[![Build Status](https://img.shields.io/github/workflow/status/MieuxVoter/majority-judgment-library-go/Go?style=for-the-badge)](https://github.com/MieuxVoter/majority-judgment-library-go/actions/workflows/go.yml)
+
 > WORK IN PROGRESS
 
 A Go library to deliberate using Majority Judgment.
