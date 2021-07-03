@@ -98,7 +98,7 @@ func (mj *MajorityJudgment) ComputeScore(tally *ProposalTally, favorContestation
 	amountOfDigitsForAdhesionScore := countDigitsUint64(amountOfJudgments * 2)
 
 	mutatedTally := tally.Copy()
-	for range tally.Tally { // loop once per grade
+	for i := uint8(0); i < amountOfGrades; i++ {
 		analysis.Run(mutatedTally, favorContestation)
 		score += fmt.Sprintf("%0"+fmt.Sprintf("%d", amountOfDigitsForGrade)+"d", analysis.MedianGrade)
 		// fixme: BAD → uint64 to int conversion — either move to int everywhere, or use whatever bigint Go has
@@ -112,7 +112,7 @@ func (mj *MajorityJudgment) ComputeScore(tally *ProposalTally, favorContestation
 	return score, nil
 }
 
-func countDigitsUint8(i uint8) (count uint64) {
+func countDigitsUint8(i uint8) (count uint8) {
 	for i > 0 {
 		i = i / 10 // euclidean division
 		count++
@@ -121,7 +121,7 @@ func countDigitsUint8(i uint8) (count uint64) {
 	return
 }
 
-func countDigitsUint64(i uint64) (count uint64) {
+func countDigitsUint64(i uint64) (count uint8) {
 	for i > 0 {
 		i = i / 10 // Euclid wuz hear
 		count++
