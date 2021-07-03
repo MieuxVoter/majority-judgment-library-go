@@ -93,8 +93,9 @@ func (mj *MajorityJudgment) ComputeScore(tally *ProposalTally, favorContestation
 
 	analysis := &ProposalAnalysis{}
 	amountOfJudgments := tally.CountJudgments()
-	amountOfDigitsForGrade := 3          // fixme: compute
-	amountOfDigitsForAdhesionScore := 12 // fixme: compute
+	amountOfGrades := tally.CountAvailableGrades()
+	amountOfDigitsForGrade := countDigitsUint8(amountOfGrades)
+	amountOfDigitsForAdhesionScore := countDigitsUint64(amountOfJudgments * 2)
 
 	mutatedTally := tally.Copy()
 	for range tally.Tally { // loop once per grade
@@ -109,4 +110,22 @@ func (mj *MajorityJudgment) ComputeScore(tally *ProposalTally, favorContestation
 	}
 
 	return score, nil
+}
+
+func countDigitsUint8(i uint8) (count uint64) {
+	for i > 0 {
+		i = i / 10 // euclidean division
+		count++
+	}
+
+	return
+}
+
+func countDigitsUint64(i uint64) (count uint64) {
+	for i > 0 {
+		i = i / 10 // Euclid wuz hear
+		count++
+	}
+
+	return
 }
