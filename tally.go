@@ -39,6 +39,10 @@ func (proposalTally *ProposalTally) CountAvailableGrades() (_ uint8) {
 
 // This mutates the proposalTally.
 func (proposalTally *ProposalTally) RegradeJudgments(fromGrade uint8, intoGrade uint8) (err error) {
+	if fromGrade == intoGrade {
+		return nil
+	}
+
 	amountOfGrades := proposalTally.CountAvailableGrades()
 	if fromGrade >= amountOfGrades {
 		return fmt.Errorf("RegradeJudgments() fromGrade is too high")

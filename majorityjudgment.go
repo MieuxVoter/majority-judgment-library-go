@@ -103,9 +103,9 @@ func (mj *MajorityJudgment) ComputeScore(tally *ProposalTally, favorContestation
 		score += fmt.Sprintf("%0"+fmt.Sprintf("%d", amountOfDigitsForGrade)+"d", analysis.MedianGrade)
 		// fixme: BAD → uint64 to int conversion — either move to int everywhere, or use whatever bigint Go has
 		score += fmt.Sprintf("%0"+fmt.Sprintf("%d", amountOfDigitsForAdhesionScore)+"d", int(amountOfJudgments)+int(analysis.SecondGroupSize)*analysis.SecondGroupSign)
-		err := mutatedTally.RegradeJudgments(analysis.MedianGrade, analysis.SecondMedianGrade)
-		if nil != err {
-			return "", err
+		regradingErr := mutatedTally.RegradeJudgments(analysis.MedianGrade, analysis.SecondMedianGrade)
+		if nil != regradingErr {
+			return "", regradingErr
 		}
 	}
 
