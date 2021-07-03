@@ -1,5 +1,6 @@
 # Majority Judgment for Golang
 
+[![MIT](https://img.shields.io/github/license/MieuxVoter/majority-judgment-bot-nimda-discord)](./LICENSE)
 [![Build Status](https://img.shields.io/github/workflow/status/MieuxVoter/majority-judgment-library-go/Go?style=for-the-badge)](https://github.com/MieuxVoter/majority-judgment-library-go/actions/workflows/go.yml)
 [![Discord Chat https://discord.gg/rAAQG9S](https://img.shields.io/discord/705322981102190593.svg?style=for-the-badge)](https://discord.gg/rAAQG9S)
 
