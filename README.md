@@ -1,9 +1,10 @@
 # Majority Judgment for Golang
 
 [![MIT](https://img.shields.io/github/license/MieuxVoter/majority-judgment-library-go?style=for-the-badge)](LICENSE.md)
-[![Build Status](https://img.shields.io/github/workflow/status/MieuxVoter/majority-judgment-library-go/Go?style=for-the-badge)](https://github.com/MieuxVoter/majority-judgment-library-go/actions/workflows/go.yml)
 [![Release](https://img.shields.io/github/v/release/MieuxVoter/majority-judgment-library-go?include_prereleases&style=for-the-badge)](https://github.com/MieuxVoter/majority-judgment-library-go/releases)
+[![Build Status](https://img.shields.io/github/workflow/status/MieuxVoter/majority-judgment-library-go/Go?style=for-the-badge)](https://github.com/MieuxVoter/majority-judgment-library-go/actions/workflows/go.yml)
 [![Coverage](https://img.shields.io/codecov/c/github/MieuxVoter/majority-judgment-library-go?style=for-the-badge&token=FEUB64HRNM)](https://app.codecov.io/gh/MieuxVoter/majority-judgment-library-go/)
+[![Code Quality](https://img.shields.io/codefactor/grade/github/MieuxVoter/majority-judgment-library-go?style=for-the-badge)](https://www.codefactor.io/repository/github/mieuxvoter/majority-judgment-library-go)
 ![LoC](https://img.shields.io/tokei/lines/github/MieuxVoter/majority-judgment-library-go?style=for-the-badge)
 [![Discord Chat https://discord.gg/rAAQG9S](https://img.shields.io/discord/705322981102190593.svg?style=for-the-badge)](https://discord.gg/rAAQG9S)
 
@@ -13,9 +14,9 @@
 > - [ ] Decide on integer types 
 > - [ ] Clean up and Release
 
-A Go library to deliberate using Majority Judgment.
+A Golang module to deliberate using Majority Judgment.
 
-We use a **score-based algorithm**, for performance and scalability.
+It leverages a **score-based algorithm**, for performance and scalability.
 
 Supports billions of judgments and thousands of proposals per poll, if need be.
 
