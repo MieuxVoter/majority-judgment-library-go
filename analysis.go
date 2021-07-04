@@ -29,10 +29,8 @@ type ProposalAnalysis struct {
 	//RebuttalGroupSize  uint64
 }
 
-// This MUTATES THE ANALYSIS, but leaves the proposalTally intact, unchanged.
-// MJ uses the low median by default (favors contestation), but there's a parameter if need be.
-func (analysis *ProposalAnalysis) Run(proposalTally *ProposalTally, favorContestation bool) {
-	analysis.TotalSize = proposalTally.CountJudgments()
+func (analysis *ProposalAnalysis) Reset() {
+	analysis.TotalSize = 0
 	analysis.MedianGrade = 0
 	analysis.MedianGroupSize = 0
 	analysis.SecondMedianGrade = 0
@@ -42,7 +40,13 @@ func (analysis *ProposalAnalysis) Run(proposalTally *ProposalTally, favorContest
 	analysis.AdhesionGroupSize = 0
 	analysis.ContestationGroupGrade = 0
 	analysis.ContestationGroupSize = 0
+}
 
+// This MUTATES THE ANALYSIS, but leaves the proposalTally intact, unchanged.
+// MJ uses the low median by default (favors contestation), but there's a parameter if need be.
+func (analysis *ProposalAnalysis) Run(proposalTally *ProposalTally, favorContestation bool) {
+	analysis.Reset()
+	analysis.TotalSize = proposalTally.CountJudgments()
 	if 0 == analysis.TotalSize {
 		return
 	}
