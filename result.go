@@ -1,11 +1,12 @@
 package judgment
 
 type PollResult struct {
-	Proposals ProposalsResults // Matches the order of the input proposals' tallies
+	Proposals       ProposalsResults // matches the order of the input proposals' tallies
+	ProposalsSorted ProposalsResults // same Results, but sorted by Rank this time
 }
 
 type ProposalResult struct {
-	Index    int    // index of the proposal in the input proposals' tallies
+	Index    int    // index of the proposal in the input proposals' tallies.  Useful with ProposalSorted
 	Rank     int    // Rank starts at 1 (best) and goes upwards.  Equal Proposals share the same rank.
 	Score    string // higher lexicographically → better rank
 	Analysis *ProposalAnalysis
