@@ -43,7 +43,7 @@ func TestReadmeDemo(t *testing.T) {
 
 func TestNoProposals(t *testing.T) {
 	poll := &PollTally{
-		AmountOfJudges: 10,
+		AmountOfJudges: 0,
 		Proposals:      []*ProposalTally{},
 	}
 	deliberator := &MajorityJudgment{}
@@ -54,7 +54,7 @@ func TestNoProposals(t *testing.T) {
 
 func TestIncoherentTally(t *testing.T) {
 	poll := &PollTally{
-		AmountOfJudges: 2, // not 8 as it should
+		AmountOfJudges: 2, // lower than expected 8
 		Proposals: []*ProposalTally{
 			{Tally: []uint64{4, 4}},
 			{Tally: []uint64{2, 6}},
