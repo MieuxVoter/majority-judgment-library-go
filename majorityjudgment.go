@@ -41,12 +41,27 @@ func (mj *MajorityJudgment) Deliberate(tally *PollTally) (_ *PollResult, err err
 		}
 	}
 
-	amountOfJudgments := tally.Proposals[0].CountJudgments()
+	maximumAmountOfJudgments := uint64(0)
 	for _, proposalTally := range tally.Proposals {
-		if amountOfJudgments != proposalTally.CountJudgments() {
-			return nil, fmt.Errorf("unbalanced tally: " +
-				"some proposals hold more judgments than others ; " +
-				"use one of the tally balancers or make your own")
+		amountOfJudgments := proposalTally.CountJudgments()
+		if amountOfJudgments > maximumAmountOfJudgments {
+			maximumAmountOfJudgments = amountOfJudgments
+		}
+	}
+
+	amountOfJudges := tally.AmountOfJudges
+	if amountOfJudges < maximumAmountOfJudgments {
+		return nil, fmt.Errorf("incoherent tally: " +
+			"some proposals hold more judgments than the specified amount of judges ; " +
+			"perhaps you forgot to set PollTally.AmountOfJudges")
+	}
+
+	//amountOfJudgments := tally.Proposals[0].CountJudgments()
+	for proposalIndex, proposalTally := range tally.Proposals {
+		if amountOfJudges != proposalTally.CountJudgments() {
+			return nil, fmt.Errorf("unbalanced tally: "+
+				"a proposal (#%d) holds less judgments than there are judges ; "+
+				"use one of the PollTally.Balance() methods first", proposalIndex)
 		}
 	}
 
@@ -81,7 +96,8 @@ func (mj *MajorityJudgment) Deliberate(tally *PollTally) (_ *PollResult, err err
 	}
 
 	result := &PollResult{
-		Proposals: proposalsResults,
+		Proposals:       proposalsResults,
+		ProposalsSorted: proposalsResultsSorted,
 	}
 
 	return result, nil
@@ -92,10 +108,15 @@ func (mj *MajorityJudgment) ComputeScore(tally *ProposalTally, favorContestation
 	score := ""
 
 	analysis := &ProposalAnalysis{}
-	amountOfJudgments := tally.CountJudgments()
 	amountOfGrades := tally.CountAvailableGrades()
+	amountOfJudgments := tally.CountJudgments()
 	amountOfDigitsForGrade := countDigitsUint8(amountOfGrades)
 	amountOfDigitsForAdhesionScore := countDigitsUint64(amountOfJudgments * 2)
+
+	amountOfJudgmentsInt := int(amountOfJudgments)
+	if amountOfJudgmentsInt < 0 {
+		return "", fmt.Errorf("too many judgments ; see branch|fork using math/big")
+	}
 
 	mutatedTally := tally.Copy()
 	for i := uint8(0); i < amountOfGrades; i++ {
