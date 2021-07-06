@@ -51,10 +51,10 @@ func (analysis *ProposalAnalysis) Run(proposalTally *ProposalTally, favorContest
 		return
 	}
 
-	adjustedTotal := analysis.TotalSize - 1
-	//if ! favorContestation {
-	//	adjustedTotal = analysis.TotalSize + 1
-	//}
+	adjustedTotal := analysis.TotalSize
+	if favorContestation {
+		adjustedTotal = analysis.TotalSize - 1
+	}
 	medianIndex := adjustedTotal / 2 // Euclidean division
 	startIndex := uint64(0)
 	cursorIndex := uint64(0)

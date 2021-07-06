@@ -154,6 +154,24 @@ func TestProposalAnalysis_Run(t *testing.T) {
 			},
 		},
 		{
+			name: "All ones (even total), favoring adhesion",
+			args: args{
+				proposalTally:     &ProposalTally{Tally: []uint64{1, 1, 1, 1, 1, 1}},
+				favorContestation: false,
+			},
+			expectations: expectations{
+				MedianGrade:            3,
+				MedianGroupSize:        1,
+				SecondMedianGrade:      2,
+				SecondGroupSize:        3,
+				SecondGroupSign:        -1,
+				AdhesionGroupGrade:     4,
+				AdhesionGroupSize:      2,
+				ContestationGroupGrade: 2,
+				ContestationGroupSize:  3,
+			},
+		},
+		{
 			name: "Basic usage 1",
 			args: args{
 				proposalTally:     &ProposalTally{Tally: []uint64{3, 2, 3, 1, 3}},
