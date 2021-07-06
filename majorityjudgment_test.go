@@ -6,6 +6,60 @@ import (
 	"testing"
 )
 
+func TestBunchOfWorkingScenarios(t *testing.T) {
+	type rawRanks []int
+	type rawTally []uint64
+	type test struct {
+		Name           string
+		AmountOfJudges uint64
+		Proposals      []rawTally
+		Ranks          rawRanks
+	}
+	tests := []test{
+		{
+			Name:           "Basic 01",
+			AmountOfJudges: 3,
+			Proposals: []rawTally{
+				[]uint64{1, 1, 1},
+				[]uint64{1, 2, 0},
+				[]uint64{0, 2, 1},
+			},
+			Ranks: []int{2, 3, 1},
+		},
+		{
+			Name:           "Billions of participants",
+			AmountOfJudges: 20e9, // 20 billion
+			Proposals: []rawTally{
+				[]uint64{10e9, 10e9},
+				[]uint64{9999999999, 10000000001},
+			},
+			Ranks: []int{2, 1},
+		},
+		// …
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.Name, func(t *testing.T) {
+			proposalsTallies := make([]*ProposalTally, 0, 10)
+			for _, p := range tt.Proposals {
+				proposalTally := &ProposalTally{Tally: p}
+				proposalsTallies = append(proposalsTallies, proposalTally)
+			}
+			poll := &PollTally{
+				AmountOfJudges: tt.AmountOfJudges,
+				Proposals:      proposalsTallies,
+			}
+			deliberator := &MajorityJudgment{}
+			result, err := deliberator.Deliberate(poll)
+			assert.NoError(t, err, "Deliberation should succeed")
+			for proposalResultIndex, proposalResult := range result.Proposals {
+				assert.Equal(t, tt.Ranks[proposalResultIndex], proposalResult.Rank, "Rank of proposal")
+			}
+
+		})
+	}
+}
+
 func TestReadmeDemo(t *testing.T) {
 	poll := &PollTally{
 		AmountOfJudges: 10,
