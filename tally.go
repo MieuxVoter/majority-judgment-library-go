@@ -4,12 +4,17 @@ import "fmt"
 
 type PollTally struct {
 	AmountOfJudges uint64           // Helps balancing tallies using default judgments.
-	Proposals      []*ProposalTally // Tallies of each proposal.  The order is preserved in the result.
+	Proposals      []*ProposalTally // Tallies of each proposal.  Its order is preserved in the result.
 }
 
 type ProposalTally struct {
-	//Total uint64    // Total amount of judgments received by this proposal, including all grades.
 	Tally []uint64 // Amount of judgments received for each grade, from "worst" grade to "best" grade.
+}
+
+func (proposalTally *ProposalTally) Analyze() (_ *ProposalAnalysis) {
+	analysis := &ProposalAnalysis{}
+	analysis.Run(proposalTally, true)
+	return analysis
 }
 
 func (proposalTally *ProposalTally) Copy() (_ *ProposalTally) {
@@ -37,7 +42,7 @@ func (proposalTally *ProposalTally) CountAvailableGrades() (_ uint8) {
 	return uint8(len(proposalTally.Tally))
 }
 
-// This mutates the proposalTally.
+// Mutates the proposalTally.
 func (proposalTally *ProposalTally) RegradeJudgments(fromGrade uint8, intoGrade uint8) (err error) {
 	if fromGrade == intoGrade {
 		return nil
@@ -57,8 +62,22 @@ func (proposalTally *ProposalTally) RegradeJudgments(fromGrade uint8, intoGrade 
 	return nil
 }
 
-func (proposalTally *ProposalTally) Analyze() (_ *ProposalAnalysis) {
-	analysis := &ProposalAnalysis{}
-	analysis.Run(proposalTally, true)
-	return analysis
+// Mutates the proposalTally
+func (proposalTally *ProposalTally) FillWithStaticDefault(upToAmount uint64, defaultGrade uint8) (err error) {
+
+	// More silent integer casting awkwardness… ; we need to fix this
+	missingAmount := int(upToAmount) - int(proposalTally.CountJudgments())
+	if missingAmount < 0 {
+		return fmt.Errorf("FillWithStaticDefault() upToAmount is lower than the actual amount of judgments")
+	} else if missingAmount == 0 {
+		return nil
+	}
+
+	if defaultGrade >= proposalTally.CountAvailableGrades() {
+		return fmt.Errorf("FillWithStaticDefault() defaultGrade is higher than the amount of available grades")
+	}
+
+	proposalTally.Tally[defaultGrade] += uint64(missingAmount)
+
+	return nil
 }
