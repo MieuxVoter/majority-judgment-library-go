@@ -79,8 +79,11 @@ func (analysis *ProposalAnalysis) Run(proposalTally *ProposalTally, favorContest
 		}
 	}
 
-	// How to multiline-format this big condition?  I failed.
-	if (favorContestation && analysis.AdhesionGroupSize <= analysis.ContestationGroupSize) || (!favorContestation && analysis.AdhesionGroupSize < analysis.ContestationGroupSize) {
+	contestationIsBiggest := analysis.AdhesionGroupSize < analysis.ContestationGroupSize
+	if favorContestation {
+		contestationIsBiggest = analysis.AdhesionGroupSize <= analysis.ContestationGroupSize
+	}
+	if contestationIsBiggest {
 		analysis.SecondMedianGrade = analysis.ContestationGroupGrade
 		analysis.SecondGroupSize = analysis.ContestationGroupSize
 		if 0 < analysis.SecondGroupSize {
