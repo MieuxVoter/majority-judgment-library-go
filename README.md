@@ -69,8 +69,15 @@ func main() {
     // result.Proposals[0].Rank == 4
     // result.Proposals[1].Rank == 1
     // result.Proposals[2].Rank == 2
-    // result.Proposals[4].Rank == 3
-    // result.Proposals[5].Rank == 4
+    // result.Proposals[3].Rank == 3
+    // result.Proposals[4].Rank == 4
+
+    // You may also use proposals sorted by Rank ; their initial Index is available
+    // result.ProposalsSorted[0].Index == 1
+    // result.ProposalsSorted[1].Index == 2
+    // result.ProposalsSorted[2].Index == 3
+    // result.ProposalsSorted[3].Index == 0
+    // result.ProposalsSorted[4].Index == 4
 
 }
 ```
