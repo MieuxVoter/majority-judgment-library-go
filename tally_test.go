@@ -174,7 +174,7 @@ func TestProposalTally_FillWithMedianDefaultSuccesses(t *testing.T) {
 	}
 }
 
-func TestProposalTally_FillWithMedianDefaultFailureAmountToLow(t *testing.T) {
+func TestProposalTally_FillWithMedianDefaultFailureAmountTooLow(t *testing.T) {
 	proposalTally := ProposalTally{Tally: []uint64{0, 1, 0, 1, 2, 3, 4}}
 	expectedTally := ProposalTally{Tally: []uint64{0, 1, 0, 1, 2, 3, 4}}
 	err := proposalTally.FillWithMedianDefault(5)
@@ -182,4 +182,117 @@ func TestProposalTally_FillWithMedianDefaultFailureAmountToLow(t *testing.T) {
 	for i := 0; i < 7; i++ {
 		assert.Equal(t, expectedTally.Tally[i], proposalTally.Tally[i], fmt.Sprintf("Grade #%d", i))
 	}
+}
+
+func TestPollTally_BalanceWithStaticDefault(t *testing.T) {
+	type test struct {
+		name         string
+		defaultGrade uint8
+		input        PollTally
+		expected     PollTally
+	}
+	tests := []test{
+		{
+			name:         "Basic usage",
+			defaultGrade: 0,
+			input: PollTally{
+				AmountOfJudges: 10,
+				Proposals: []*ProposalTally{
+					{Tally: []uint64{1, 2, 2}},
+					{Tally: []uint64{2, 2, 2}},
+					{Tally: []uint64{0, 7, 3}},
+				},
+			},
+			expected: PollTally{
+				AmountOfJudges: 10,
+				Proposals: []*ProposalTally{
+					{Tally: []uint64{6, 2, 2}},
+					{Tally: []uint64{6, 2, 2}},
+					{Tally: []uint64{0, 7, 3}},
+				},
+			},
+		},
+		// …
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := tt.input.BalanceWithStaticDefault(tt.defaultGrade)
+			assert.NoError(t, err, "Balancing should succeed")
+			for proposalIndex, proposalTally := range tt.input.Proposals {
+				for i := 0; i < len(proposalTally.Tally); i++ {
+					assert.Equal(t,
+						tt.expected.Proposals[proposalIndex].Tally[i],
+						proposalTally.Tally[i],
+						fmt.Sprintf("Grade #%d", i))
+				}
+			}
+		})
+	}
+}
+
+func TestProposalTally_BalanceWithStaticDefaultFailureAmountTooLow(t *testing.T) {
+	pollTally := &PollTally{
+		AmountOfJudges: 2,
+		Proposals: []*ProposalTally{
+			{Tally: []uint64{1, 2, 2}},
+			{Tally: []uint64{2, 2, 2}},
+		},
+	}
+	err := pollTally.BalanceWithStaticDefault(0)
+	assert.Error(t, err, "Filling should fail")
+}
+
+func TestPollTally_BalanceWithMedianDefault(t *testing.T) {
+	type test struct {
+		name     string
+		input    PollTally
+		expected PollTally
+	}
+	tests := []test{
+		{
+			name: "Basic usage",
+			input: PollTally{
+				AmountOfJudges: 10,
+				Proposals: []*ProposalTally{
+					{Tally: []uint64{1, 2, 2}},
+					{Tally: []uint64{2, 2, 2}},
+					{Tally: []uint64{0, 7, 3}},
+				},
+			},
+			expected: PollTally{
+				Proposals: []*ProposalTally{
+					{Tally: []uint64{1, 7, 2}},
+					{Tally: []uint64{2, 6, 2}},
+					{Tally: []uint64{0, 7, 3}},
+				},
+			},
+		},
+		// …
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := tt.input.BalanceWithMedianDefault()
+			assert.NoError(t, err, "Balancing should succeed")
+			for proposalIndex, proposalTally := range tt.input.Proposals {
+				for i := 0; i < len(proposalTally.Tally); i++ {
+					assert.Equal(t,
+						tt.expected.Proposals[proposalIndex].Tally[i],
+						proposalTally.Tally[i],
+						fmt.Sprintf("Grade #%d", i))
+				}
+			}
+		})
+	}
+}
+
+func TestProposalTally_BalanceWithMedianDefaultFailureAmountTooLow(t *testing.T) {
+	pollTally := &PollTally{
+		AmountOfJudges: 2,
+		Proposals: []*ProposalTally{
+			{Tally: []uint64{1, 2, 2}},
+			{Tally: []uint64{2, 2, 2}},
+		},
+	}
+	err := pollTally.BalanceWithMedianDefault()
+	assert.Error(t, err, "Filling should fail")
 }

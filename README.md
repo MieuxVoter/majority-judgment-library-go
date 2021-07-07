@@ -84,6 +84,49 @@ func main() {
 }
 ```
 
+### Balancing uneven proposals
+
+Sometimes, some proposals receive more judgments than others, and the tallies are unbalanced.
+In those cases, a _default judgment_ strategy has to be picked:
+
+#### Static Default Grade
+
+Missing (or "I don't know") judgments are considered of a grade defined in advance,
+usually `to reject` in order to incentivize proposals to be explicit and clear.
+
+You may use `PollTally.BalanceWithStaticDefault(defaultGrade)` to that effect:
+
+```go
+pollTally := &PollTally{
+    AmountOfJudges: 10,
+    Proposals: []*ProposalTally{
+        {Tally: []uint64{2, 1, 2, 2, 1}}, // Proposal A
+        {Tally: []uint64{3, 1, 3, 1, 1}}, // Proposal B
+        {Tally: []uint64{0, 1, 1, 0, 0}}, // Proposal C
+        // …
+    },
+}
+defaultGrade := 0
+pollTally.BalanceWithStaticDefault(defaultGrade)
+
+// pollTally was mutated and now contains balanced proposals' tallies
+// pollTally.Proposals[0].Tally == {4, 1, 2, 2, 1}  // Proposal A is now balanced 
+// pollTally.Proposals[1].Tally == {4, 1, 3, 1, 1}  // Proposal B is now balanced
+// pollTally.Proposals[2].Tally == {8, 1, 1, 0, 0}  // Proposal C is now balanced
+```
+
+#### Median Default Grade
+
+Same behavior as static, but the default grade for each proposal is its median grade.
+
+Use `PollTally.BalanceWithMedianDefault()`.
+
+
+#### Normalization
+
+> Not implemented yet ; would require either `math/big` for LCM or floating-point arithmetic
+> This is part of why deciding on int types is so tricky.
+
 
 ## License
 
