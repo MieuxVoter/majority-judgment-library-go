@@ -81,3 +81,14 @@ func (proposalTally *ProposalTally) FillWithStaticDefault(upToAmount uint64, def
 
 	return nil
 }
+
+func (proposalTally *ProposalTally) FillWithMedianDefault(upToAmount uint64) (err error) {
+
+	analysis := proposalTally.Analyze()
+	fillErr := proposalTally.FillWithStaticDefault(upToAmount, analysis.MedianGrade)
+	if fillErr != nil {
+		return fillErr
+	}
+
+	return nil
+}
