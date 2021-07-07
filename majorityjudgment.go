@@ -5,27 +5,11 @@ import (
 	"sort"
 )
 
-type DeliberatorInterface interface {
-	Deliberate(tally *PollTally) (result *PollResult, err error)
-}
-
 type MajorityJudgment struct {
 	favorContestation bool // strategy for evenness of judgments ; defaults to true
 }
 
 func (mj *MajorityJudgment) Deliberate(tally *PollTally) (_ *PollResult, err error) {
-
-	// TODO: preset balancers : static, median, normalization
-	//// Consider missing judgments as TO_REJECT judgments
-	//// One reason why we need many algorithms, and options on each
-	//for _, candidateTally := range pollTally.Candidates {
-	//	missing := pollTally.MaxJudgmentsAmount - candidateTally.JudgmentsAmount
-	//	if 0 < missing {
-	//		candidateTally.JudgmentsAmount = pollTally.MaxJudgmentsAmount
-	//		candidateTally.Grades[0].Amount += missing
-	//		//println("Added the missing TO REJECT judgments", missing)
-	//	}
-	//}
 
 	amountOfProposals := len(tally.Proposals)
 	if 0 == amountOfProposals {
@@ -56,7 +40,6 @@ func (mj *MajorityJudgment) Deliberate(tally *PollTally) (_ *PollResult, err err
 			"perhaps you forgot to set PollTally.AmountOfJudges")
 	}
 
-	//amountOfJudgments := tally.Proposals[0].CountJudgments()
 	for proposalIndex, proposalTally := range tally.Proposals {
 		if amountOfJudges != proposalTally.CountJudgments() {
 			return nil, fmt.Errorf("unbalanced tally: "+
