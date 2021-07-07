@@ -23,6 +23,8 @@ Supports billions of judgments and thousands of proposals per poll, if need be.
 
 ## Installation
 
+> NOT AVAILABLE YET
+
     go get -u github.com/mieuxvoter/judgment
 
 
@@ -90,6 +92,8 @@ func main() {
 
 ## Contribute
 
-A review by a seasoned `Go` veteran would be appreciated.
+This project needs a review by `Go` devs.
+Feel free to suggest changes, report issues, make improvements, etc.
 
+Some more information is available in [`docs/`](./docs).
 
