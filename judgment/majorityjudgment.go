@@ -109,7 +109,7 @@ func (mj *MajorityJudgment) ComputeScore(tally *ProposalTally, favorContestation
 		score += fmt.Sprintf("%0"+fmt.Sprintf("%d", amountOfDigitsForAdhesionScore)+"d", int(amountOfJudgments)+int(analysis.SecondGroupSize)*analysis.SecondGroupSign)
 		regradingErr := mutatedTally.RegradeJudgments(analysis.MedianGrade, analysis.SecondMedianGrade)
 		if nil != regradingErr {
-			return "", regradingErr
+			return "", regradingErr // 仕方がない
 		}
 	}
 
