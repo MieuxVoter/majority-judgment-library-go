@@ -8,24 +8,24 @@
 ![LoC](https://img.shields.io/tokei/lines/github/MieuxVoter/majority-judgment-library-go?style=for-the-badge)
 [![Discord Chat https://discord.gg/rAAQG9S](https://img.shields.io/discord/705322981102190593.svg?style=for-the-badge)](https://discord.gg/rAAQG9S)
 
-> WORK IN PROGRESS
-> - [x] Basic Working Implementation
-> - [ ] Balancers (static and median) 
-> - [ ] Decide on integer types 
-> - [ ] Clean up and Release
-
 A Golang module to deliberate using Majority Judgment.
 
-It leverages a **score-based algorithm**, for performance and scalability.
 
-Supports billions of judgments and thousands of proposals per poll, if need be.
+## Features
+
+- **score-based algorithm**, for performance and scalability
+- supports billions of judgments with almost the same cost as dozens
+- supports thousands of proposals per poll
+- default judgment balancing tools: static grade, median grade
 
 
 ## Installation
 
-> NOT AVAILABLE YET
+    go get -u github.com/mieuxvoter/majority-judgment-library-go
 
-    go get -u github.com/mieuxvoter/judgment
+It exposes the package `judgment`, for concision, since the repo name itself is quite long and we can't rename it.
+
+> It's a pre-release.  We still have some int types that may change until v1.
 
 
 ## Usage
@@ -37,19 +37,17 @@ Say you have the following tally:
 You can compute out the majority judgment rank of each proposal like so:
 
 ```go
-
 package main
 
 import (
-	"fmt"
-	"log"
-
-	"github.com/mieuxvoter/judgment"
+    "fmt"
+    "github.com/mieuxvoter/majority-judgment-library-go"
+    "log"
 )
 
 func main() {
 
-    poll := &(judgment.PollTally{
+    pollTally := &(judgment.PollTally{
         AmountOfJudges: 10,
         Proposals: []*judgment.ProposalTally{
             {Tally: []uint64{2, 2, 2, 2, 2}}, // Proposal A   Amount of judgments received for each grade,
@@ -61,25 +59,27 @@ func main() {
         },
     })
     deliberator := &(judgment.MajorityJudgment{})
-    result, err := deliberator.Deliberate(poll)
+    result, err := deliberator.Deliberate(pollTally)
 
     if nil != err {
         log.Fatalf("Deliberation failed: %v", err)
     }
-    
+
     // Proposals results are ordered like tallies, but Rank is available. 
-    // result.Proposals[0].Rank == 4
-    // result.Proposals[1].Rank == 1
-    // result.Proposals[2].Rank == 2
-    // result.Proposals[3].Rank == 3
-    // result.Proposals[4].Rank == 4
+    // result.Proposals[0].Rank == 4 // Proposal A
+    // result.Proposals[1].Rank == 1 // Proposal B
+    // result.Proposals[2].Rank == 2 // Proposal C
+    // result.Proposals[3].Rank == 3 // Proposal D
+    // result.Proposals[4].Rank == 4 // Proposal E
 
     // You may also use proposals sorted by Rank ; their initial Index is available
-    // result.ProposalsSorted[0].Index == 1
-    // result.ProposalsSorted[1].Index == 2
-    // result.ProposalsSorted[2].Index == 3
-    // result.ProposalsSorted[3].Index == 0
-    // result.ProposalsSorted[4].Index == 4
+    // result.ProposalsSorted[0].Index == 1 // Proposal B
+    // result.ProposalsSorted[1].Index == 2 // Proposal C
+    // result.ProposalsSorted[2].Index == 3 // Proposal D
+    // result.ProposalsSorted[3].Index == 0 // Proposal A
+    // result.ProposalsSorted[4].Index == 4 // Proposal E
+    
+    fmt.Printf("Best Proposal Index: %d\n", result.ProposalsSorted[0].Index)
 
 }
 ```
