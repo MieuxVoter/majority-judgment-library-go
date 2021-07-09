@@ -1,4 +1,4 @@
-module github.com/mieuxvoter/judgment
+module github.com/mieuxvoter/majority-judgment-library-go
 
 go 1.12
 
