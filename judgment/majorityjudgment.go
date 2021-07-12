@@ -5,10 +5,12 @@ import (
 	"sort"
 )
 
+// MajorityJudgment is one of the deliberators ; it implements DeliberatorInterface.
 type MajorityJudgment struct {
 	favorContestation bool // strategy for evenness of judgments ; defaults to true
 }
 
+// Deliberate is part of the DeliberatorInterface
 func (mj *MajorityJudgment) Deliberate(tally *PollTally) (_ *PollResult, err error) {
 
 	amountOfProposals := len(tally.Proposals)
@@ -86,6 +88,8 @@ func (mj *MajorityJudgment) Deliberate(tally *PollTally) (_ *PollResult, err err
 	return result, nil
 }
 
+// ComputeScore is the heart of our MajorityJudgment Deliberator.
+// Not sure it should be exported, though.
 // See docs/score-calculus-flowchart.png
 func (mj *MajorityJudgment) ComputeScore(tally *ProposalTally, favorContestation bool) (_ string, err error) {
 	score := ""

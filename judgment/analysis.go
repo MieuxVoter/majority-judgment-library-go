@@ -13,6 +13,7 @@ package judgment
 // Not sure about that.  Is it worth the hassle?  May change.  Advice welcome.
 //
 
+// ProposalAnalysis holds some of the data we need to compute the Score of a Proposal, and hence its Rank.
 type ProposalAnalysis struct {
 	TotalSize              uint64 // total amount of judges|judgments across all grades
 	MedianGrade            uint8  // 0 == "worst" grade, goes up to the amount of grades minus one
@@ -29,6 +30,7 @@ type ProposalAnalysis struct {
 	//RebuttalGroupSize  uint64
 }
 
+// Reset the ProposalAnalysis to default values.
 func (analysis *ProposalAnalysis) Reset() {
 	analysis.TotalSize = 0
 	analysis.MedianGrade = 0
@@ -42,8 +44,9 @@ func (analysis *ProposalAnalysis) Reset() {
 	analysis.ContestationGroupSize = 0
 }
 
-// This MUTATES THE ANALYSIS, but leaves the proposalTally intact, unchanged.
+// Run MUTATES THE ANALYSIS, but leaves the proposalTally intact, unchanged.
 // MJ uses the low median by default (favors contestation), but there's a parameter if need be.
+// This method is deemed complex by gocyclo ; there's no way around it.
 func (analysis *ProposalAnalysis) Run(proposalTally *ProposalTally, favorContestation bool) {
 	analysis.Reset()
 	analysis.TotalSize = proposalTally.CountJudgments()
