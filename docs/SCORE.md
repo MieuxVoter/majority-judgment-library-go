@@ -35,6 +35,8 @@ On this page you will find explanations about **how one can compute a score for 
 
 ## About the Score
 
+We call the _Complete Majority Gauge_ a _Score_ (it's shorter).
+
 A Proposal's Score is a long string of characters, mostly numbers with (optional) separation characters for readability.  We use a `string` instead of an `integer` because leading zeroes are meaningful.
 
 **A higher _score_ (lexicographically) means a better _rank_.**
