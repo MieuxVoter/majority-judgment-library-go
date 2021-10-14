@@ -1,5 +1,6 @@
 # Majority Judgment Score
 
+<!--
 ```mermaid
 graph TD
 
@@ -23,6 +24,7 @@ ComputeAdhesionScore --> Regrade
 Regrade --> ForLoop
 
 ```
+-->
 
 ![Flowchart of the score calculus algorithm](./score-calculus-flowchart.png)
 
@@ -63,9 +65,9 @@ Furthermore, score calculus can be parallelized per proposal, enabling efficient
 Each Judge may deliver **one** Judgment of a certain Grade to **each** Proposal.  The set of available Grades is defined by the poll's organizer.
 
 
-Elector → Judge | Participant[^judge_vs_participant]
-Vote → Judgment
-Candidate → Proposal
+* Elector → Judge | Participant[^judge_vs_participant]
+* Vote → Judgment
+* Candidate → Proposal
 
 
 [^judge_vs_participant]: Join the [debate about majority judgment semantics](https://forum.mieuxvoter.fr/t/terminologie-mieuxvoter/42)
@@ -158,19 +160,19 @@ We initialize the score with the median grade (in numeric form[^letters_would_wo
 
 [^letters_would_work]: It would also work with letters, or any adequately ordered characters.
 
-Pizza: `1` (passable)
-Chips: `1` (passable)
-Pasta: `1` (passable)
-Bread: `2` (good)
+* Pizza: `1` (passable)
+* Chips: `1` (passable)
+* Pasta: `1` (passable)
+* Bread: `2` (good)
 
 We can already see that Bread is going to be the winner of the poll, in 1<sup>st</sup> rank
 
 Onto the next step: the adhesion score.
 
-Pizza: `1_15` (10 + 5)
-Chips: `1_14` (10 + 4)
-Pasta: `1_15` (10 + 5)
-Bread: `2_06` (10 - 4)
+* Pizza: `1_15` (10 + 5)
+* Chips: `1_14` (10 + 4)
+* Pasta: `1_15` (10 + 5)
+* Bread: `2_06` (10 - 4)
 
 We can now see that Chips will come last, in 4<sup>th</sup> rank.
 
@@ -185,17 +187,17 @@ Let's regrade the median into the second median to get the following tally:
 
 Now we can restart the loop, and append the new median grade:
 
-Pizza: `1_15/2` (good)
-Chips: `1_14/2` (good)
-Pasta: `1_15/2` (good)
-Bread: `2_06/1` (passable)
+* Pizza: `1_15/2` (good)
+* Chips: `1_14/2` (good)
+* Pasta: `1_15/2` (good)
+* Bread: `2_06/1` (passable)
 
 Let's add the new adhesion score:
 
-Pizza: `1_15/2_07` (10 - 3)
-Chips: `1_14/2_08` (10 - 2)
-Pasta: `1_15/2_07` (10 - 3)
-Bread: `2_06/1_12` (10 + 2)
+* Pizza: `1_15/2_07` (10 - 3)
+* Chips: `1_14/2_08` (10 - 2)
+* Pasta: `1_15/2_07` (10 - 3)
+* Bread: `2_06/1_12` (10 + 2)
 
 It's still not enough yet to decide between Pizza and Pasta.
 Let's loop again !
@@ -207,15 +209,15 @@ Let's loop again !
 |   Pasta    |     8     |     0    |   0  |     2     |
 |   Bread    |     1     |     0    |   0  |     9     |
 
-Pizza: `1_15/2_07/0` (to reject)
-Chips: `1_14/2_08/0` (to reject)
-Pasta: `1_15/2_07/0 `(to reject)
-Bread: `2_06/1_12/3` (excellent)
+* Pizza: `1_15/2_07/0` (to reject)
+* Chips: `1_14/2_08/0` (to reject)
+* Pasta: `1_15/2_07/0 `(to reject)
+* Bread: `2_06/1_12/3` (excellent)
 
-Pizza: `1_15/2_07/0_13` (10 + 3)
-Chips: `1_14/2_08/0_12` (10 + 2)
-Pasta: `1_15/2_07/0_12` (10 + 2)
-Bread: `2_06/1_12/3_09` (10 - 1)
+* Pizza: `1_15/2_07/0_13` (10 + 3)
+* Chips: `1_14/2_08/0_12` (10 + 2)
+* Pasta: `1_15/2_07/0_12` (10 + 2)
+* Bread: `2_06/1_12/3_09` (10 - 1)
 
 Now Pasta and Pizza have different scores and we can observe that Pizza > Pasta.
 
