@@ -1,31 +1,5 @@
 # Majority Judgment Score
 
-<!--
-```mermaid
-graph TD
-
-Score>Score]
-ForLoop{loop once <br> per grade <br> in the set <br> = 7 times }
-Start((Start))
-End((End))
-
-ComputeMedian[Compute Median Grade]
-ComputeAdhesionScore[Compute Adhesion Score]
-Regrade[Regrade median <br> into second median]
-
-Start --> ForLoop
-ForLoop --> |loop| ComputeMedian
-ForLoop --> |end| End
-End -.- Score
-ComputeMedian --> |append| Score
-ComputeMedian --> ComputeAdhesionScore
-ComputeAdhesionScore --> |append| Score
-ComputeAdhesionScore --> Regrade
-Regrade --> ForLoop
-
-```
--->
-
 ![Flowchart of the score calculus algorithm](./score-calculus-flowchart.png)
 
 
@@ -245,5 +219,32 @@ The default judgment is usually either:
 [^caution_disclaimer]: _Caution:_ This strategy is less resilient to collegial proposal submissions[^collegial_submissions], since it favors low-participation proposals.
 
 [^collegial_submissions]: Letting participants handle themselves the proposal submissions is a valuable feature.  Thankfully, participation issues can be mitigated in various ways, for example by stating in advance that proposals need at least a percentage (32% ?) of the median participation to enter the ranking pool.  The value of this inclusivity threshold could also be subjected to scrutinization.
+
+
+## Flowchart Source Code
+
+```mermaid
+graph TD
+
+Score>Score]
+ForLoop{loop once <br> per grade <br> in the set <br> = 7 times }
+Start((Start))
+End((End))
+
+ComputeMedian[Compute Median Grade]
+ComputeAdhesionScore[Compute Adhesion Score]
+Regrade[Regrade median <br> into second median]
+
+Start --> ForLoop
+ForLoop --> |loop| ComputeMedian
+ForLoop --> |end| End
+End -.- Score
+ComputeMedian --> |append| Score
+ComputeMedian --> ComputeAdhesionScore
+ComputeAdhesionScore --> |append| Score
+ComputeAdhesionScore --> Regrade
+Regrade --> ForLoop
+
+```
 
 
