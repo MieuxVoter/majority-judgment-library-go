@@ -36,10 +36,14 @@ func (mj *MajorityJudgment) Deliberate(tally *PollTally) (_ *PollResult, err err
 	}
 
 	amountOfJudges := tally.AmountOfJudges
+	if 0 == amountOfJudges {
+		amountOfJudges = tally.GuessAmountOfJudges()
+	}
 	if amountOfJudges < maximumAmountOfJudgments {
 		return nil, fmt.Errorf("incoherent tally: " +
 			"some proposals hold more judgments than the specified amount of judges ; " +
-			"perhaps you forgot to set PollTally.AmountOfJudges")
+			"perhaps you forgot to set PollTally.AmountOfJudges " +
+			"or to call PollTally.GuessAmountOfJudges()")
 	}
 
 	for proposalIndex, proposalTally := range tally.Proposals {
