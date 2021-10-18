@@ -95,6 +95,40 @@ func TestReadmeDemo(t *testing.T) {
 
 }
 
+func TestGuessingAmountOfJudges(t *testing.T) {
+	poll := &PollTally{
+		Proposals: []*ProposalTally{
+			{Tally: []uint64{2, 2, 2, 2, 2}},
+			{Tally: []uint64{2, 1, 1, 1, 5}},
+			{Tally: []uint64{2, 1, 1, 2, 4}},
+			{Tally: []uint64{2, 1, 5, 0, 2}},
+			{Tally: []uint64{2, 2, 2, 2, 2}},
+		},
+	}
+	deliberator := &MajorityJudgment{}
+	result, err := deliberator.Deliberate(poll)
+	assert.NoError(t, err, "Deliberation should succeed")
+	assert.Len(t, result.Proposals, len(poll.Proposals), "There should be as many results as there are tallies.")
+	assert.Equal(t, 4, result.Proposals[0].Rank, "Rank of proposal A")
+	assert.Equal(t, 1, result.Proposals[1].Rank, "Rank of proposal B")
+	assert.Equal(t, 2, result.Proposals[2].Rank, "Rank of proposal C")
+	assert.Equal(t, 3, result.Proposals[3].Rank, "Rank of proposal D")
+	assert.Equal(t, 4, result.Proposals[4].Rank, "Rank of proposal E")
+
+	assert.Equal(t, 1, result.ProposalsSorted[0].Rank, "Rank of sorted proposal A")
+	assert.Equal(t, 2, result.ProposalsSorted[1].Rank, "Rank of sorted proposal 1")
+	assert.Equal(t, 3, result.ProposalsSorted[2].Rank, "Rank of sorted proposal 2")
+	assert.Equal(t, 4, result.ProposalsSorted[3].Rank, "Rank of sorted proposal 3")
+	assert.Equal(t, 4, result.ProposalsSorted[4].Rank, "Rank of sorted proposal 4")
+
+	assert.Equal(t, 1, result.ProposalsSorted[0].Index, "Index of sorted proposal A")
+	assert.Equal(t, 2, result.ProposalsSorted[1].Index, "Index of sorted proposal 1")
+	assert.Equal(t, 3, result.ProposalsSorted[2].Index, "Index of sorted proposal 2")
+	assert.Equal(t, 0, result.ProposalsSorted[3].Index, "Index of sorted proposal 3")
+	assert.Equal(t, 4, result.ProposalsSorted[4].Index, "Index of sorted proposal 4")
+
+}
+
 func TestNoProposals(t *testing.T) {
 	poll := &PollTally{
 		AmountOfJudges: 0,

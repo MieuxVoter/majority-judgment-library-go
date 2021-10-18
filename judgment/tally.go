@@ -1,11 +1,25 @@
 package judgment
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // PollTally describes the amount of judgments received by each proposal on each grade.
 type PollTally struct {
 	AmountOfJudges uint64           // Helps balancing tallies using default judgments.
 	Proposals      []*ProposalTally // Tallies of each proposal.  Its order is preserved in the result.
+}
+
+// GuessAmountOfJudges also mutates the PollTally by filling the AmountOfJudges property
+func (pollTally *PollTally) GuessAmountOfJudges() (_ uint64) {
+	pollTally.AmountOfJudges = 0
+	for _, proposalTally := range pollTally.Proposals {
+		amountOfJudges := proposalTally.CountJudgments()
+		if pollTally.AmountOfJudges < amountOfJudges {
+			pollTally.AmountOfJudges = amountOfJudges
+		}
+	}
+	return pollTally.AmountOfJudges
 }
 
 // BalanceWithStaticDefault mutates the PollTally
