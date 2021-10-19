@@ -13,18 +13,18 @@ package judgment
 // Not sure about that.  Is it worth the hassle?  May change.  Advice welcome.
 //
 
-// ProposalAnalysis holds some of the data we need to compute the Score of a Proposal, and hence its Rank.
+// ProposalAnalysis holds some data we need to compute the Score of a Proposal, and hence its Rank.
 type ProposalAnalysis struct {
-	TotalSize              uint64 // total amount of judges|judgments across all grades
-	MedianGrade            uint8  // 0 == "worst" grade, goes up to the amount of grades minus one
-	MedianGroupSize        uint64 // in judges|judgments
-	SecondMedianGrade      uint8  // used in Majority Judgment deliberation
-	SecondGroupSize        uint64 // either adhesion or contestation, whichever is bigger (contestation prevails)
-	SecondGroupSign        int    // -1 for contestation group, +1 for adhesion group
-	AdhesionGroupGrade     uint8
-	AdhesionGroupSize      uint64
-	ContestationGroupGrade uint8
-	ContestationGroupSize  uint64
+	TotalSize              uint64 `json:"totalSize"`         // total amount of judges|judgments across all grades
+	MedianGrade            uint8  `json:"medianGrade"`       // 0 == "worst" grade, goes up to the amount of grades - 1
+	MedianGroupSize        uint64 `json:"medianGroupSize"`   // in judges|judgments
+	SecondMedianGrade      uint8  `json:"secondMedianGrade"` // used in Majority Judgment deliberation
+	SecondGroupSize        uint64 `json:"secondGroupSize"`   // either adhesion or contestation, whichever is bigger
+	SecondGroupSign        int    `json:"secondGroupSign"`   // -1 for contestation group, +1 for adhesion group
+	AdhesionGroupGrade     uint8  `json:"adhesionGroupGrade"`
+	AdhesionGroupSize      uint64 `json:"adhesionGroupSize"`
+	ContestationGroupGrade uint8  `json:"contestationGroupGrade"`
+	ContestationGroupSize  uint64 `json:"contestationGroupSize"`
 	// Can't decide between Rebuttal and Contestation…  Help!
 	//RebuttalGroupGrade uint8
 	//RebuttalGroupSize  uint64

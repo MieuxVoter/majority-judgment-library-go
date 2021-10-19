@@ -6,8 +6,8 @@ import (
 
 // PollTally describes the amount of judgments received by each proposal on each grade.
 type PollTally struct {
-	AmountOfJudges uint64           // Helps balancing tallies using default judgments.
-	Proposals      []*ProposalTally // Tallies of each proposal.  Its order is preserved in the result.
+	AmountOfJudges uint64           `json:"amountOfJudges"` // Helps balancing tallies using default judgments.
+	Proposals      []*ProposalTally `json:"proposals"`      // Tallies of each proposal.  Its order is preserved in the result.
 }
 
 // GuessAmountOfJudges also mutates the PollTally by filling the AmountOfJudges property
@@ -48,7 +48,7 @@ func (pollTally *PollTally) BalanceWithMedianDefault() (err error) {
 
 // ProposalTally holds the amount of judgments received per Grade for a single Proposal
 type ProposalTally struct {
-	Tally []uint64 // Amount of judgments received for each grade, from "worst" grade to "best" grade.
+	Tally []uint64 `json:"tally"` // Amount of judgments received for each grade, from "worst" grade to "best" grade.
 }
 
 // Analyze a ProposalTally and return its ProposalAnalysis

@@ -2,16 +2,16 @@ package judgment
 
 // PollResult holds the result for each proposal, in the original proposal order, or sorted by Rank.
 type PollResult struct {
-	Proposals       ProposalsResults // matches the order of the input proposals' tallies
-	ProposalsSorted ProposalsResults // same Results, but sorted by Rank this time
+	Proposals       ProposalsResults `json:"proposals"`       // matches the order of the input proposals' tallies
+	ProposalsSorted ProposalsResults `json:"proposalsSorted"` // same Results, but sorted by Rank this time
 }
 
 // ProposalResult holds the computed Rank for a proposal, as well as analysis data.
 type ProposalResult struct {
-	Index    int    // index of the proposal in the input proposals' tallies.  Useful with ProposalSorted
-	Rank     int    // Rank starts at 1 (best) and goes upwards.  Equal Proposals share the same rank.
-	Score    string // higher lexicographically → better rank
-	Analysis *ProposalAnalysis
+	Index    int               `json:"index"` // Index of the proposal in the input proposals' tallies.  Useful with ProposalSorted
+	Rank     int               `json:"rank"`  // Rank starts at 1 (best) and goes upwards.  Equal Proposals share the same rank.
+	Score    string            `json:"score"` // higher lexicographically → better rank
+	Analysis *ProposalAnalysis `json:"analysis"`
 }
 
 // ProposalsResults implements sort.Interface based on the Score field.
