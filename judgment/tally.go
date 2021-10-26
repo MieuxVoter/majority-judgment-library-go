@@ -10,8 +10,8 @@ type PollTally struct {
 	Proposals      []*ProposalTally `json:"proposals"`      // Tallies of each proposal.  Its order is preserved in the result.
 }
 
-// GuessAmountOfJudges also mutates the PollTally by filling the AmountOfJudges property
-func (pollTally *PollTally) GuessAmountOfJudges() (_ uint64) {
+// GuessAmountOfJudges returns the guess and mutates the PollTally by filling the AmountOfJudges property
+func (pollTally *PollTally) GuessAmountOfJudges() uint64 {
 	pollTally.AmountOfJudges = 0
 	for _, proposalTally := range pollTally.Proposals {
 		amountOfJudges := proposalTally.CountJudgments()
@@ -22,7 +22,9 @@ func (pollTally *PollTally) GuessAmountOfJudges() (_ uint64) {
 	return pollTally.AmountOfJudges
 }
 
-// BalanceWithStaticDefault mutates the PollTally
+// BalanceWithStaticDefault makes sure all proposals received the same amount of judgments,
+// by filling the gaps with judgments of the specified default grade.
+// This method mutates the PollTally
 func (pollTally *PollTally) BalanceWithStaticDefault(defaultGrade uint8) (err error) {
 	for _, proposalTally := range pollTally.Proposals {
 		proposalErr := proposalTally.FillWithStaticDefault(pollTally.AmountOfJudges, defaultGrade)
@@ -87,7 +89,6 @@ func (proposalTally *ProposalTally) CountAvailableGrades() (_ uint8) {
 // RegradeJudgments mutates the proposalTally by moving judgments from one grade to another.
 // Useful when computing the score ; perhaps this method should not be exported, though.
 func (proposalTally *ProposalTally) RegradeJudgments(fromGrade uint8, intoGrade uint8) (err error) {
-
 	if fromGrade == intoGrade {
 		return nil
 	}
@@ -106,18 +107,19 @@ func (proposalTally *ProposalTally) RegradeJudgments(fromGrade uint8, intoGrade 
 	return nil
 }
 
-// FillWithStaticDefault mutates the proposalTally
+// FillWithStaticDefault adds ballots of the specified grade so that the tally grows up to the specified amount
+// This method mutates the proposalTally
 func (proposalTally *ProposalTally) FillWithStaticDefault(upToAmount uint64, defaultGrade uint8) (err error) {
 	// More silent integer casting awkwardness… ; we need to fix this
 	missingAmount := int(upToAmount) - int(proposalTally.CountJudgments())
 	if missingAmount < 0 {
-		return fmt.Errorf("FillWithStaticDefault() upToAmount is lower than the actual amount of judgments")
+		return fmt.Errorf("FillWithStaticDefault() amount of judges is lower than the amount of judgments")
 	} else if missingAmount == 0 {
 		return nil
 	}
 
 	if defaultGrade >= proposalTally.CountAvailableGrades() {
-		return fmt.Errorf("FillWithStaticDefault() defaultGrade is higher than the amount of available grades")
+		return fmt.Errorf("FillWithStaticDefault() default grade is higher than the amount of available grades")
 	}
 
 	proposalTally.Tally[defaultGrade] += uint64(missingAmount)
@@ -125,7 +127,8 @@ func (proposalTally *ProposalTally) FillWithStaticDefault(upToAmount uint64, def
 	return nil
 }
 
-// FillWithMedianDefault mutates the proposalTally
+// FillWithMedianDefault adds ballots of the majority grade so that the tally grows up to the specified amount
+// This method mutates the proposalTally
 func (proposalTally *ProposalTally) FillWithMedianDefault(upToAmount uint64) (err error) {
 	analysis := proposalTally.Analyze()
 	fillErr := proposalTally.FillWithStaticDefault(upToAmount, analysis.MedianGrade)
