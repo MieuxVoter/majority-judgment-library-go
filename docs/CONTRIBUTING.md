@@ -18,6 +18,7 @@ Should be shaken out automatically if tests are not exported, right?
 
 ## Tests
 
+    cd judgment
     go test
 
 

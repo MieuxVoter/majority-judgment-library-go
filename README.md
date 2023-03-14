@@ -9,7 +9,8 @@
 ![LoC](https://img.shields.io/tokei/lines/github/MieuxVoter/majority-judgment-library-go?style=for-the-badge)
 [![Discord Chat https://discord.gg/rAAQG9S](https://img.shields.io/discord/705322981102190593.svg?style=for-the-badge)](https://discord.gg/rAAQG9S)
 
-A Golang module to deliberate using Majority Judgment.
+A Golang module to deliberate using Majority Judgment to rank proposals/candidates.
+Majority Judgment is a simple, subtle and fair voting system.
 
 
 ## Features
@@ -42,7 +43,7 @@ package main
 
 import (
     "fmt"
-    "github.com/mieuxvoter/majority-judgment-library-go"
+    "github.com/mieuxvoter/majority-judgment-library-go/judgment"
     "log"
 )
 

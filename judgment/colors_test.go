@@ -15,42 +15,39 @@ func hex(s string) color.Color {
 	return c
 }
 
-//func TestBakePalette(t *testing.T) {
-//	type args struct {
-//		toLength  int
-//		keyColors color.Palette
-//	}
-//	tests := []struct {
-//		name    string
-//		args    args
-//		want    color.Palette
-//		wantErr bool
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _tt := range tests {
-//		t.Run(tt.namefunc(t *testing.T) {
-//			goterr := bakePalette(tt.args.toLengthtt.args.keyColors)
-//			if (err != nil) != tt.wantErr {
-//				t.Errorf("bakePalette() error = %vwantErr %v"errtt.wantErr)
-//				return
-//			}
-//			if !reflect.DeepEqual(gottt.want) {
-//				t.Errorf("bakePalette() got = %vwant %v"gottt.want)
-//			}
-//		})
-//	}
-//}
-
 func TestCreatePalette(t *testing.T) {
 	type args struct {
 		amountOfColors int
 	}
 	tests := []struct {
-		name string
-		args args
-		want color.Palette
+		name                   string
+		args                   args
+		want                   color.Palette
+		expectedAmountOfColors int
 	}{
+		{
+			name: "Palette of -1 is empty",
+			args: args{
+				amountOfColors: -1,
+			},
+			want: []color.Color{},
+		},
+		{
+			name: "Palette of 0 is empty",
+			args: args{
+				amountOfColors: 0,
+			},
+			want: []color.Color{},
+		},
+		{
+			name: "Palette of 1",
+			args: args{
+				amountOfColors: 1,
+			},
+			want: []color.Color{
+				hex("#00a249"),
+			},
+		},
 		{
 			name: "Palette of 2",
 			args: args{
@@ -62,16 +59,61 @@ func TestCreatePalette(t *testing.T) {
 			},
 		},
 		{
+			name: "Palette of 3",
+			args: args{
+				amountOfColors: 3,
+			},
+			want: []color.Color{
+				hex("#df3222"),
+				hex("#fab001"),
+				hex("#00a249"),
+			},
+		},
+		{
+			name: "Palette of 4",
+			args: args{
+				amountOfColors: 4,
+			},
+			want: []color.Color{
+				hex("#df3222"),
+				hex("#fab001"),
+				hex("#7bbd3e"),
+				hex("#017a36"),
+			},
+		},
+		{
+			name: "Palette of 5",
+			args: args{
+				amountOfColors: 5,
+			},
+			want: []color.Color{
+				hex("#df3222"),
+				hex("#ed6f01"),
+				hex("#fab001"),
+				hex("#7bbd3e"),
+				hex("#00a249"),
+			},
+		},
+		{
+			name: "Palette of 6",
+			args: args{
+				amountOfColors: 6,
+			},
+			expectedAmountOfColors: 6,
+		},
+		{
 			name: "Palette of 7",
 			args: args{
 				amountOfColors: 7,
 			},
+			expectedAmountOfColors: 7,
 		},
 		{
 			name: "Palette of 32",
 			args: args{
 				amountOfColors: 32,
 			},
+			expectedAmountOfColors: 32,
 			want: []color.Color{
 				hex("#df3222"),
 				hex("#e3401d"),
@@ -112,22 +154,24 @@ func TestCreatePalette(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			actual := CreateDefaultPalette(tt.args.amountOfColors)
 			print(DumpPaletteHexString(actual, ", ", "\"") + "\n")
-			if nil == tt.want {
-				return
+
+			if tt.expectedAmountOfColors > 0 {
+				assert.Equal(t, tt.expectedAmountOfColors, len(actual))
 			}
-			for i, expectedColor := range tt.want {
-				// our test values are not as precise as colorful's colors
-				//assert.Equal(t, expectedColor, actual[i])
-				// so we use equalish comparisons
-				p := 300.0
-				er, eg, eb, ea := expectedColor.RGBA()
-				ar, ag, ab, aa := actual[i].RGBA()
-				assert.InDelta(t, er, ar, p)
-				assert.InDelta(t, eg, ag, p)
-				assert.InDelta(t, eb, ab, p)
-				assert.InDelta(t, ea, aa, p)
+			if nil != tt.want {
+				for i, expectedColor := range tt.want {
+					// our test values are not as precise as colorful's colors
+					//assert.Equal(t, expectedColor, actual[i])
+					// so we use equalish comparisons
+					p := 300.0
+					er, eg, eb, ea := expectedColor.RGBA()
+					ar, ag, ab, aa := actual[i].RGBA()
+					assert.InDelta(t, er, ar, p)
+					assert.InDelta(t, eg, ag, p)
+					assert.InDelta(t, eb, ab, p)
+					assert.InDelta(t, ea, aa, p)
+				}
 			}
-			//assert.Equal(t, true, true)
 		})
 	}
 }
