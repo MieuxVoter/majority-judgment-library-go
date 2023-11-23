@@ -8,10 +8,11 @@ type PollResult struct {
 
 // ProposalResult holds the computed Rank for a proposal, as well as analysis data.
 type ProposalResult struct {
-	Index    int               `json:"index"` // Index of the proposal in the input proposals' tallies.  Useful with ProposalSorted
+	Index    int               `json:"index"` // Index of the proposal in the input proposals' tallies.  Useful with ProposalSorted.
 	Rank     int               `json:"rank"`  // Rank starts at 1 (best) and goes upwards.  Equal Proposals share the same rank.
-	Score    string            `json:"score"` // higher lexicographically → better rank
+	Score    string            `json:"score"` // Higher Score lexicographically → better Rank.
 	Analysis *ProposalAnalysis `json:"analysis"`
+	Tally    *ProposalTally    `json:"tally"` // The tally of grades that generated this result.
 }
 
 // ProposalsResults implements sort.Interface based on the Score field.

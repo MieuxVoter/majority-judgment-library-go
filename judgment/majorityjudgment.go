@@ -65,6 +65,7 @@ func (mj *MajorityJudgment) Deliberate(tally *PollTally) (_ *PollResult, err err
 			Index:    proposalIndex,
 			Score:    score,
 			Analysis: proposalTally.Analyze(),
+			Tally:    proposalTally,
 			Rank:     0, // we set it below after the sort
 		}
 		proposalsResults = append(proposalsResults, proposalResult)
