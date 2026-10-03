@@ -3,7 +3,12 @@
 
 ## Dependencies
 
-No dependencies would be best.
+### Colorful
+
+Handling colors (HCL blending) without a lib would be pretty painful. 
+
+### Testify
+
 We do have _one_ dev dependency on an assertions library for testing.
 Should be shaken out automatically if tests are not exported, right?
 

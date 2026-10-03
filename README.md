@@ -8,8 +8,8 @@
 [![A+](https://img.shields.io/badge/go%20report-A+-brightgreen.svg?style=for-the-badge)](https://goreportcard.com/report/github.com/mieuxvoter/majority-judgment-library-go)
 [![Discord Chat https://discord.gg/k9YRuZPSZs](https://img.shields.io/discord/705322981102190593.svg?style=for-the-badge)](https://discord.gg/k9YRuZPSZs)
 
-A Golang module to deliberate using Majority Judgment to rank proposals/candidates.
-Majority Judgment is a simple, subtle and fair voting system.
+A Golang module to rank proposals (aka. candidates) using Majority Judgment.
+Majority Judgment is a simple, subtle and fair voting system used in french wine contests, among other things.
 
 
 ## Features
@@ -35,7 +35,7 @@ It exposes the package `judgment`, for concision, since the repo name itself is 
 
 Say you have the following tally:
 
-![Example of a merit profile](./docs/2-2-2-2-2_2-1-1-1-5_2-1-1-2-4_2-1-5-0-2_2-2-2-2-2.png)
+![Example of some merit profiles](./docs/merit-example.svg)
 
 You can compute out the majority judgment rank of each proposal like so:
 
@@ -86,6 +86,14 @@ func main() {
 
 }
 ```
+
+![Same example of some merit profiles, ranked](./docs/merit-example-ranked.svg)
+
+> [!TIP]
+> These images of merit profiles were generated using our [online tool].
+> This tool actually uses this very library internally.
+
+[online tool]: https://educ.mieuxvoter.fr
 
 ### Balancing uneven proposals
 
