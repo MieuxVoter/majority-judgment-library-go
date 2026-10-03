@@ -9,8 +9,9 @@ package judgment
 import (
 	"errors"
 	"fmt"
-	"github.com/lucasb-eyer/go-colorful"
 	"image/color"
+
+	"github.com/lucasb-eyer/go-colorful"
 )
 
 // CreateDefaultPalette returns a Palette of amountOfColors colors.

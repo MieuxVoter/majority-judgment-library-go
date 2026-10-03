@@ -1,12 +1,5 @@
 package judgment
 
-// Searching for good names
-// ------------------------
-// Rebuttal == Contestation == ???
-// Rebuttal has a nice length isonomy with Adhesion
-// Contestation ain't in some dictionaries
-// Contestation feels more natural to a french thinker
-// Rebuttal may be a little (too) intense
 //
 // uint8 for grades
 // ----------------
@@ -25,9 +18,6 @@ type ProposalAnalysis struct {
 	AdhesionGroupSize      uint64 `json:"adhesionGroupSize"`
 	ContestationGroupGrade uint8  `json:"contestationGroupGrade"`
 	ContestationGroupSize  uint64 `json:"contestationGroupSize"`
-	// Can't decide between Rebuttal and Contestation…  Help!
-	//RebuttalGroupGrade uint8
-	//RebuttalGroupSize  uint64
 }
 
 // Reset the ProposalAnalysis to default values.
@@ -99,5 +89,4 @@ func (analysis *ProposalAnalysis) Run(proposalTally *ProposalTally, favorContest
 			analysis.SecondGroupSign = 1
 		}
 	}
-
 }
