@@ -1,6 +1,6 @@
 module github.com/mieuxvoter/majority-judgment-library-go
 
-go 1.12
+go 1.17
 
 require (
 	github.com/lucasb-eyer/go-colorful v1.4.1
