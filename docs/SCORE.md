@@ -18,6 +18,9 @@ A Proposal's Score is a long string of characters, mostly numbers with (optional
 **A higher _score_ (lexicographically) means a better _rank_.**
 Equal _scores_ (in extreme cases) mean equal _ranks_.
 
+> [!INFO]
+> Nowadays we often compute a _scalar majority merit_ with an algorithm that's very close to this score.
+> We don't do that in this lib for now.  We'd need support for big integers.
 
 ## Why a Score?
 

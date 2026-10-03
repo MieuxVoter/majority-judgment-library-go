@@ -22,7 +22,9 @@ Majority Judgment is a simple, subtle and fair voting system.
 
 ## Installation
 
-    go get -u github.com/mieuxvoter/majority-judgment-library-go
+```shell
+go get -u github.com/mieuxvoter/majority-judgment-library-go
+```
 
 It exposes the package `judgment`, for concision, since the repo name itself is quite long and we can't rename it.
 
