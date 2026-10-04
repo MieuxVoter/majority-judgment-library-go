@@ -2,8 +2,9 @@ package judgment
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestProposalTally_RegradeJudgments(t *testing.T) {

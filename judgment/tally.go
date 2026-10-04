@@ -24,8 +24,8 @@ func (pollTally *PollTally) GuessAmountOfJudges() uint64 {
 
 // BalanceWithStaticDefault makes sure all proposals received the same amount of judgments,
 // by filling the gaps with judgments of the specified default grade.
-// This method mutates the PollTally
-func (pollTally *PollTally) BalanceWithStaticDefault(defaultGrade uint8) (err error) {
+// This method mutates the PollTally.
+func (pollTally *PollTally) BalanceWithStaticDefault(defaultGrade uint8) error {
 	for _, proposalTally := range pollTally.Proposals {
 		proposalErr := proposalTally.FillWithStaticDefault(pollTally.AmountOfJudges, defaultGrade)
 		if proposalErr != nil {
@@ -36,7 +36,7 @@ func (pollTally *PollTally) BalanceWithStaticDefault(defaultGrade uint8) (err er
 }
 
 // BalanceWithMedianDefault mutates the PollTally
-func (pollTally *PollTally) BalanceWithMedianDefault() (err error) {
+func (pollTally *PollTally) BalanceWithMedianDefault() error {
 	for _, proposalTally := range pollTally.Proposals {
 		proposalErr := proposalTally.FillWithMedianDefault(pollTally.AmountOfJudges)
 		if proposalErr != nil {
@@ -60,7 +60,7 @@ func (proposalTally *ProposalTally) Analyze() (_ *ProposalAnalysis) {
 	return analysis
 }
 
-// Copy a ProposalTally (deeply)
+// Copy a ProposalTally (deeply).
 func (proposalTally *ProposalTally) Copy() (_ *ProposalTally) {
 	// There might exist an elegant one-liner to copy a slice of uint64
 	intTally := make([]uint64, 0, 8)
@@ -72,8 +72,8 @@ func (proposalTally *ProposalTally) Copy() (_ *ProposalTally) {
 	}
 }
 
-// CountJudgments tallies the received judgments by a Proposal
-func (proposalTally *ProposalTally) CountJudgments() (_ uint64) {
+// CountJudgments tallies all the judgments a Proposal received, across all grades.
+func (proposalTally *ProposalTally) CountJudgments() uint64 {
 	amountOfJudgments := uint64(0)
 	for _, gradeTally := range proposalTally.Tally {
 		amountOfJudgments += gradeTally
@@ -82,13 +82,13 @@ func (proposalTally *ProposalTally) CountJudgments() (_ uint64) {
 }
 
 // CountAvailableGrades returns the amount of available grades in the poll (usually 7 or so).
-func (proposalTally *ProposalTally) CountAvailableGrades() (_ uint8) {
+func (proposalTally *ProposalTally) CountAvailableGrades() uint8 {
 	return uint8(len(proposalTally.Tally))
 }
 
 // RegradeJudgments mutates the proposalTally by moving judgments from one grade to another.
 // Useful when computing the score ; perhaps this method should not be exported, though.
-func (proposalTally *ProposalTally) RegradeJudgments(fromGrade uint8, intoGrade uint8) (err error) {
+func (proposalTally *ProposalTally) RegradeJudgments(fromGrade uint8, intoGrade uint8) error {
 	if fromGrade == intoGrade {
 		return nil
 	}
@@ -107,33 +107,36 @@ func (proposalTally *ProposalTally) RegradeJudgments(fromGrade uint8, intoGrade 
 	return nil
 }
 
-// FillWithStaticDefault adds ballots of the specified grade so that the tally grows up to the specified amount
-// This method mutates the proposalTally
-func (proposalTally *ProposalTally) FillWithStaticDefault(upToAmount uint64, defaultGrade uint8) (err error) {
-	// More silent integer casting awkwardness… ; we need to fix this
-	missingAmount := int(upToAmount) - int(proposalTally.CountJudgments())
-	if missingAmount < 0 {
-		return fmt.Errorf("FillWithStaticDefault() amount of judges is lower than the amount of judgments")
-	} else if missingAmount == 0 {
+// FillWithStaticDefault adds ballots of the specified grade so that the tally grows up to the specified amount.
+// This method mutates the proposalTally.
+func (proposalTally *ProposalTally) FillWithStaticDefault(upToAmount uint64, defaultGrade uint8) error {
+	currentAmount := proposalTally.CountJudgments()
+	if upToAmount < currentAmount {
+		return fmt.Errorf("amount of judges cannot be lower than the amount of judgments")
+	}
+
+	missingAmount := upToAmount - currentAmount
+	if missingAmount == 0 {
 		return nil
 	}
 
 	if defaultGrade >= proposalTally.CountAvailableGrades() {
-		return fmt.Errorf("FillWithStaticDefault() default grade is higher than the amount of available grades")
+		return fmt.Errorf("default grade is out of the range of available grades")
 	}
 
-	proposalTally.Tally[defaultGrade] += uint64(missingAmount)
+	proposalTally.Tally[defaultGrade] += missingAmount
 
 	return nil
 }
 
 // FillWithMedianDefault adds ballots of the majority grade so that the tally grows up to the specified amount
 // This method mutates the proposalTally
-func (proposalTally *ProposalTally) FillWithMedianDefault(upToAmount uint64) (err error) {
+func (proposalTally *ProposalTally) FillWithMedianDefault(upToAmount uint64) error {
 	analysis := proposalTally.Analyze()
 	fillErr := proposalTally.FillWithStaticDefault(upToAmount, analysis.MedianGrade)
 	if fillErr != nil {
 		return fillErr
 	}
+
 	return nil
 }
